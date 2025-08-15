@@ -10,7 +10,10 @@
     ],
     "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
     "leaf": "0xd3d819a1cfb05478ef2aa6d0fbb5ef5b549402f85233e133378aceecac311c12",
-    "reasons": ["Reached level 4", "Claimed Self verification badge"]
+    "reasons": [
+      "Reached level 4",
+      "Claimed Self verification badge"
+    ]
   },
   "0x4da0086b2e014f5f43b3e8090f8c13a674d7d220": {
     "inputs": [
@@ -23,7 +26,10 @@
     ],
     "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
     "leaf": "0x671a91057d1d74096529843dff03248deec65a435833ba1a0413cc3e211662e0",
-    "reasons": ["Reached level 2", "Claimed Self verification badge"]
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
   },
   "0xb616f982ea09db9b220233f59310714a71145858": {
     "inputs": [
@@ -36,7 +42,10 @@
     ],
     "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
     "leaf": "0xe67518151592f956f038099b17d0e2c0546770c1931b4d9d2425ff2d6540ea74",
-    "reasons": ["Reached level 2", "Claimed Self verification badge"]
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
   },
   "0xd17f6ba8ca601b2d4384b90c6a0d475cc4ecab6e": {
     "inputs": [
@@ -49,6 +58,8 @@
     ],
     "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
     "leaf": "0x17f7d7095748982343be6c8aeb7fd3a977c3bc5da0f750c32c89b0a8000d114f",
-    "reasons": ["Reached level 3"]
+    "reasons": [
+      "Reached level 3"
+    ]
   }
 }
