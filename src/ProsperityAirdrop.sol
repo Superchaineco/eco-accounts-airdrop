@@ -254,7 +254,7 @@ contract ProsperityAidrop is EIP712, Ownable {
         override
         returns (string memory name, string memory version)
     {
-        name = "Airdrop";
+        name = "ProsperityAidrop";
         version = "1";
     }
 

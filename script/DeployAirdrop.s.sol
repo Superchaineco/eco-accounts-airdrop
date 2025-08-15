@@ -40,7 +40,8 @@ contract DeployAirdrop is Script {
 
     function run() public {
         vm.startBroadcast();
-        deployAirdrop();
+        ProsperityAidrop airdrop = new ProsperityAidrop();
+        console.log("Merkle Airdrop deployed at %s", address(airdrop));
         vm.stopBroadcast();
     }
 }
