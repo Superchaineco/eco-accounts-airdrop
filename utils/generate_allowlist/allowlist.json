@@ -3,7 +3,7 @@
     "address",
     "uint"
   ],
-  "count": 4,
+  "count": 12,
   "values": {
     "0": {
       "0": "0x4988b2ac207c684125cadecd5cefa3a93dcaa72e",
@@ -34,6 +34,70 @@
       "1": "3000000000000000000",
       "reasons": [
         "Reached level 3"
+      ]
+    },
+    "4": {
+      "0": "0x66f9a27957Af42465d3A3f1FC2AE5d446Bc75775",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "5": {
+      "0": "0x2e12c876290683823B952F64b4663b49Ee43f86D",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "6": {
+      "0": "0xFb8ca0B5D2416Fe3448A8BE4112351DDa502CbfB",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "7": {
+      "0": "0x27fe3F01875B43d9907C0ABaEe355021fe340598",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "8": {
+      "0": "0x629588F9153c42AEf86D45A81B8461f4EA59457A",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "9": {
+      "0": "0x724EA9473297D61f49454F28430E4afA40B9d066",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "10": {
+      "0": "0x38C5ABdE7d9d174E27E80bF69F3f082080A6Eec6",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
+      ]
+    },
+    "11": {
+      "0": "0x62654f087e7193F2A235425eb94Ec3E529F49a02",
+      "1": "3000000000000000000",
+      "reasons": [
+        "Reached level 2",
+        "Claimed Self verification badge"
       ]
     }
   }

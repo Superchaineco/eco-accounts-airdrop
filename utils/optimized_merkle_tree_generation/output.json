@@ -6,9 +6,11 @@
     ],
     "proof": [
       "0x671a91057d1d74096529843dff03248deec65a435833ba1a0413cc3e211662e0",
-      "0x4fdb26808357c887dece6526806ae5bcd3610603b05248a177c8fb9a53278a6a"
+      "0x4fdb26808357c887dece6526806ae5bcd3610603b05248a177c8fb9a53278a6a",
+      "0xc45f18222188aba8bebe8549d524393799915bb469891c85114d49eca92780d8",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
     ],
-    "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
     "leaf": "0xd3d819a1cfb05478ef2aa6d0fbb5ef5b549402f85233e133378aceecac311c12",
     "reasons": [
       "Reached level 4",
@@ -22,9 +24,11 @@
     ],
     "proof": [
       "0xd3d819a1cfb05478ef2aa6d0fbb5ef5b549402f85233e133378aceecac311c12",
-      "0x4fdb26808357c887dece6526806ae5bcd3610603b05248a177c8fb9a53278a6a"
+      "0x4fdb26808357c887dece6526806ae5bcd3610603b05248a177c8fb9a53278a6a",
+      "0xc45f18222188aba8bebe8549d524393799915bb469891c85114d49eca92780d8",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
     ],
-    "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
     "leaf": "0x671a91057d1d74096529843dff03248deec65a435833ba1a0413cc3e211662e0",
     "reasons": [
       "Reached level 2",
@@ -38,9 +42,11 @@
     ],
     "proof": [
       "0x17f7d7095748982343be6c8aeb7fd3a977c3bc5da0f750c32c89b0a8000d114f",
-      "0xa42d12a2579065548c2f5d70004be49d4c9c85dc5f597093c0bf7a1a5311ad42"
+      "0xa42d12a2579065548c2f5d70004be49d4c9c85dc5f597093c0bf7a1a5311ad42",
+      "0xc45f18222188aba8bebe8549d524393799915bb469891c85114d49eca92780d8",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
     ],
-    "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
     "leaf": "0xe67518151592f956f038099b17d0e2c0546770c1931b4d9d2425ff2d6540ea74",
     "reasons": [
       "Reached level 2",
@@ -54,12 +60,158 @@
     ],
     "proof": [
       "0xe67518151592f956f038099b17d0e2c0546770c1931b4d9d2425ff2d6540ea74",
-      "0xa42d12a2579065548c2f5d70004be49d4c9c85dc5f597093c0bf7a1a5311ad42"
+      "0xa42d12a2579065548c2f5d70004be49d4c9c85dc5f597093c0bf7a1a5311ad42",
+      "0xc45f18222188aba8bebe8549d524393799915bb469891c85114d49eca92780d8",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
     ],
-    "root": "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
     "leaf": "0x17f7d7095748982343be6c8aeb7fd3a977c3bc5da0f750c32c89b0a8000d114f",
     "reasons": [
       "Reached level 3"
+    ]
+  },
+  "0x66f9a27957Af42465d3A3f1FC2AE5d446Bc75775": {
+    "inputs": [
+      "0x66f9a27957Af42465d3A3f1FC2AE5d446Bc75775",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0xbb6ca7cd36bc9ecfa4df8bf0e3c2ce2bb708b1168e30b50e37d4c008f8461e3d",
+      "0x3564b8526ea31e59fa0222c51ff2085834220bceaf0a83321af9aad0e954ec76",
+      "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0xf9c0f094de98d8627ce804b8d951ff644441261533004d88f58f9c34fdfbc7d3",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x2e12c876290683823B952F64b4663b49Ee43f86D": {
+    "inputs": [
+      "0x2e12c876290683823B952F64b4663b49Ee43f86D",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0xf9c0f094de98d8627ce804b8d951ff644441261533004d88f58f9c34fdfbc7d3",
+      "0x3564b8526ea31e59fa0222c51ff2085834220bceaf0a83321af9aad0e954ec76",
+      "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0xbb6ca7cd36bc9ecfa4df8bf0e3c2ce2bb708b1168e30b50e37d4c008f8461e3d",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0xFb8ca0B5D2416Fe3448A8BE4112351DDa502CbfB": {
+    "inputs": [
+      "0xFb8ca0B5D2416Fe3448A8BE4112351DDa502CbfB",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0xd55c432727b4a489e3fb865e6b72479d44f5f68ac6d3b3da7d9f6a1dbe32a8b9",
+      "0xd9d0f4af64d82597cb00683d7d681666f0fbbce88e660c9ac0c2510032a59fdb",
+      "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0xcf6118ab763cf32f578bbfa73849f45a3f08d5f18610c15771d19c5580cee436",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x27fe3F01875B43d9907C0ABaEe355021fe340598": {
+    "inputs": [
+      "0x27fe3F01875B43d9907C0ABaEe355021fe340598",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0xcf6118ab763cf32f578bbfa73849f45a3f08d5f18610c15771d19c5580cee436",
+      "0xd9d0f4af64d82597cb00683d7d681666f0fbbce88e660c9ac0c2510032a59fdb",
+      "0x3546c721dfc9bf02a2f10b38c64b7ba6c6d3217afaba535e3ecbb59d0e0c8612",
+      "0x32d771445a0652729a0cee44fbec00c904cf6c880371f8ca5c0eb604f97da665"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0xd55c432727b4a489e3fb865e6b72479d44f5f68ac6d3b3da7d9f6a1dbe32a8b9",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x629588F9153c42AEf86D45A81B8461f4EA59457A": {
+    "inputs": [
+      "0x629588F9153c42AEf86D45A81B8461f4EA59457A",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0x265ef3bd3a63b42d76f48252b25fc6ff6179092faf537d07704ff04ead9b32f6",
+      "0xb8d59dd0e69421ae6e5c22b108fb0bb716e500387b79c6f967b857fa157e0116",
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "0xdd1cc24de8bd01a2759271b28b0f73a1721266a1e0331c604677d185bf54b9a3"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0x2ebbed4190dc54777f9cfeb9b0058c90c5b5f11f62fd1dd66ca465835d0575be",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x724EA9473297D61f49454F28430E4afA40B9d066": {
+    "inputs": [
+      "0x724EA9473297D61f49454F28430E4afA40B9d066",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0x2ebbed4190dc54777f9cfeb9b0058c90c5b5f11f62fd1dd66ca465835d0575be",
+      "0xb8d59dd0e69421ae6e5c22b108fb0bb716e500387b79c6f967b857fa157e0116",
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "0xdd1cc24de8bd01a2759271b28b0f73a1721266a1e0331c604677d185bf54b9a3"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0x265ef3bd3a63b42d76f48252b25fc6ff6179092faf537d07704ff04ead9b32f6",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x38C5ABdE7d9d174E27E80bF69F3f082080A6Eec6": {
+    "inputs": [
+      "0x38C5ABdE7d9d174E27E80bF69F3f082080A6Eec6",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0x9b6c0ef11da923beeeab99d525d0434fbcfaa43b4c09ee807ef735c4cea425e8",
+      "0x72c77e73a982b2f969661c74226c676ece22a286d6c0f64588ffb5e5590c8e84",
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "0xdd1cc24de8bd01a2759271b28b0f73a1721266a1e0331c604677d185bf54b9a3"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0xdf58ac5045b56850ad010a314859fae9850e49ad02345fba728a1ddbdb51cd1b",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
+    ]
+  },
+  "0x62654f087e7193F2A235425eb94Ec3E529F49a02": {
+    "inputs": [
+      "0x62654f087e7193F2A235425eb94Ec3E529F49a02",
+      "3000000000000000000"
+    ],
+    "proof": [
+      "0xdf58ac5045b56850ad010a314859fae9850e49ad02345fba728a1ddbdb51cd1b",
+      "0x72c77e73a982b2f969661c74226c676ece22a286d6c0f64588ffb5e5590c8e84",
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "0xdd1cc24de8bd01a2759271b28b0f73a1721266a1e0331c604677d185bf54b9a3"
+    ],
+    "root": "0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc",
+    "leaf": "0x9b6c0ef11da923beeeab99d525d0434fbcfaa43b4c09ee807ef735c4cea425e8",
+    "reasons": [
+      "Reached level 2",
+      "Claimed Self verification badge"
     ]
   }
 }
