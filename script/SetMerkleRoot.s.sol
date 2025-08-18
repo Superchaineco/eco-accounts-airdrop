@@ -6,7 +6,7 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract SetMerkleRoot is Script {
     bytes32 private _merkleRoot =
-        0xd261cff9d5adec714268bdca43132920c4dc3c96ddd0861c81d07ba47417ebcc;
+        0xc6f434a596ef9576ff110b99f4a01cb8b4ae07d9c8e1ac0fe8b7a69e339ac98b;
     // uint256 private _amount = 2500000 * 4 * 1e18;
     // Expiration time: 30 days from now (in seconds)
     uint256 private _expirationTime = block.timestamp + 7 days;

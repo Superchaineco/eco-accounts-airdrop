@@ -3,7 +3,7 @@
     "address",
     "uint"
   ],
-  "count": 12,
+  "count": 11,
   "values": {
     "0": {
       "0": "0x4988b2ac207c684125cadecd5cefa3a93dcaa72e",
@@ -85,14 +85,6 @@
       ]
     },
     "10": {
-      "0": "0x38C5ABdE7d9d174E27E80bF69F3f082080A6Eec6",
-      "1": "3000000000000000000",
-      "reasons": [
-        "Reached level 2",
-        "Claimed Self verification badge"
-      ]
-    },
-    "11": {
       "0": "0x62654f087e7193F2A235425eb94Ec3E529F49a02",
       "1": "3000000000000000000",
       "reasons": [
