@@ -15,5 +15,5 @@ optimism = "https://mainnet.optimism.io"
 celo = "https://rpc.celopg.eco"
 
 [etherscan]
-optimism = { key = "UGB21JYI7XRY68M6IBNNYHPJYTSX2V5ATX" }
+optimism = { key = "I36FHHV8SEQP38FSSMQUCI92BJK4H5PJSE" }
 celo = { key = "I36FHHV8SEQP38FSSMQUCI92BJK4H5PJSE" }
