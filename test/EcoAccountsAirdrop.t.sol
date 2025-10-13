@@ -2,12 +2,12 @@
 pragma solidity ^0.8.11;
 
 import {Test, console} from "forge-std/Test.sol";
-import {ProsperityAidrop} from "../src/ProsperityAirdrop.sol";
+import {EcoAccountsAirdrop} from "../src/EcoAccountsAirdrop.sol";
 import {DeployAirdrop} from "../script/DeployAirdrop.s.sol";
 import {MockToken} from "../src/mocks/MockToken.sol";
 
 contract MerkleAirdropTest is Test {
-    ProsperityAidrop public airdrop;
+    EcoAccountsAirdrop public airdrop;
     MockToken public token;
     uint256 public amount = 25 * 1e18;
     bytes32 public merkleRoot =
@@ -62,7 +62,7 @@ contract MerkleAirdropTest is Test {
         console.log("Starting Balance: %s", startingBalance);
 
         vm.prank(user);
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        airdrop.claimERC20(address(token), user, amount, 1, PROOF);
 
         uint256 endingBalance = token.balanceOf(user);
         console.log("Ending Balance: %s", endingBalance);
@@ -74,7 +74,7 @@ contract MerkleAirdropTest is Test {
         testUserClaim();
         vm.prank(user);
         vm.expectRevert();
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        airdrop.claimERC20(address(token), user, amount, 1, PROOF);
     }
 
     function testAirdropExpiration() public {
@@ -89,20 +89,23 @@ contract MerkleAirdropTest is Test {
         );
 
         // Verify expiration time is set correctly
-        assertEq(airdrop.tokenExpirationTime(address(token)), expirationTime);
+        assertEq(
+            airdrop.tokenExpirationTime(address(token), 1),
+            expirationTime
+        );
 
         // Verify airdrop is not expired initially
-        assertFalse(airdrop.isAirdropExpired(address(token)));
+        assertFalse(airdrop.isAirdropExpired(address(token), 1));
 
         // Claim should work before expiration
         vm.prank(user);
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        airdrop.claimERC20(address(token), user, amount, 1, PROOF);
 
         // Fast forward time to after expiration
         vm.warp(expirationTime + 1);
 
         // Verify airdrop is now expired
-        assertTrue(airdrop.isAirdropExpired(address(token)));
+        assertTrue(airdrop.isAirdropExpired(address(token), 1));
     }
 
     function testCannotClaimAfterExpiration() public {
@@ -122,38 +125,45 @@ contract MerkleAirdropTest is Test {
         // Claim should fail after expiration
         vm.prank(user);
         vm.expectRevert(
-            abi.encodeWithSelector(ProsperityAidrop.AirdropExpired.selector)
+            abi.encodeWithSelector(EcoAccountsAirdrop.AirdropExpired.selector)
         );
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        airdrop.claimERC20(address(token), user, amount, 1, PROOF);
     }
 
     function testUpdateExpiration() public {
         // Set initial expiration time
         uint256 initialExpiration = block.timestamp + 1 hours;
-        MockToken token = new MockToken();
-        ProsperityAidrop airdrop = new ProsperityAidrop();
-        airdrop.setMerkleRoot(
-            address(token),
+        MockToken localToken = new MockToken();
+        EcoAccountsAirdrop localAirdrop = new EcoAccountsAirdrop();
+        localAirdrop.setMerkleRoot(
+            address(localToken),
             merkleRoot,
             true,
             initialExpiration
         );
-        token.mint(airdrop.owner(), amount);
-        token.approve(address(airdrop), amount);
+        localToken.mint(localAirdrop.owner(), amount);
+        localToken.approve(address(localAirdrop), amount);
 
         // Update expiration time
         uint256 newExpiration = block.timestamp + 2 hours;
-        airdrop.updateAirdropExpiration(address(token), newExpiration);
+        localAirdrop.updateAirdropExpiration(
+            address(localToken),
+            1,
+            newExpiration
+        );
 
         // Verify new expiration time
-        assertEq(airdrop.tokenExpirationTime(address(token)), newExpiration);
+        assertEq(
+            localAirdrop.tokenExpirationTime(address(localToken), 1),
+            newExpiration
+        );
 
         // Fast forward past initial expiration but before new expiration
         vm.warp(initialExpiration + 30 minutes);
 
         // Claim should still work
         vm.prank(user);
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        localAirdrop.claimERC20(address(localToken), user, amount, 1, PROOF);
     }
 
     function testNoExpirationByDefault() public {
@@ -162,17 +172,43 @@ contract MerkleAirdropTest is Test {
         (airdrop, token) = deploy.deployAirdrop(amount, merkleRoot, 0);
 
         // Verify no expiration is set
-        assertEq(airdrop.tokenExpirationTime(address(token)), 0);
-        assertFalse(airdrop.isAirdropExpired(address(token)));
+        assertEq(airdrop.tokenExpirationTime(address(token), 1), 0);
+        assertFalse(airdrop.isAirdropExpired(address(token), 1));
 
         // Fast forward time significantly
         vm.warp(block.timestamp + 365 days);
 
         // Airdrop should still not be expired
-        assertFalse(airdrop.isAirdropExpired(address(token)));
+        assertFalse(airdrop.isAirdropExpired(address(token), 1));
 
         // Claim should still work
         vm.prank(user);
-        airdrop.claimERC20(address(token), user, amount, PROOF);
+        airdrop.claimERC20(address(token), user, amount, 1, PROOF);
+    }
+
+    function testMultipleAirdropsSameToken() public {
+        // First airdrop
+        vm.prank(airdrop.owner());
+        airdrop.setMerkleRoot(address(token), merkleRoot, true, 0);
+        uint256 conditionId1 = airdrop.tokenConditionId(address(token));
+
+        // Claim first airdrop
+        vm.prank(user);
+        airdrop.claimERC20(address(token), user, amount, conditionId1, PROOF);
+
+        uint256 balanceAfterFirst = token.balanceOf(user);
+        assertEq(balanceAfterFirst, amount);
+
+        // Second airdrop with same merkle root
+        vm.prank(airdrop.owner());
+        airdrop.setMerkleRoot(address(token), merkleRoot, true, 0);
+        uint256 conditionId2 = airdrop.tokenConditionId(address(token));
+
+        // Claim second airdrop
+        vm.prank(user);
+        airdrop.claimERC20(address(token), user, amount, conditionId2, PROOF);
+
+        uint256 balanceAfterSecond = token.balanceOf(user);
+        assertEq(balanceAfterSecond, amount * 2);
     }
 }

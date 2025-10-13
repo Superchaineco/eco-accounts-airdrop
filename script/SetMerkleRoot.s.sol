@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 import {Script, console} from "forge-std/Script.sol";
-import {ProsperityAidrop} from "../src/ProsperityAirdrop.sol";
+import {EcoAccountsAirdrop} from "../src/EcoAccountsAirdrop.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract SetMerkleRoot is Script {
@@ -11,9 +11,9 @@ contract SetMerkleRoot is Script {
     // Expiration time: 30 days from now (in seconds)
     uint256 private _expirationTime = block.timestamp + 31 days;
 
-    function run() public returns (ProsperityAidrop) {
+    function run() public returns (EcoAccountsAirdrop) {
         vm.startBroadcast();
-        ProsperityAidrop airdrop = ProsperityAidrop(
+        EcoAccountsAirdrop airdrop = EcoAccountsAirdrop(
             0x2a4871972Ece4e6E04a07E0F3e3D8168a261Dce2
         );
         ERC20 CELO = ERC20(0x471EcE3750Da237f93B8E339c536989b8978a438);

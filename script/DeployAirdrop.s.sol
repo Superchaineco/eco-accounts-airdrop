@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 import {Script, console} from "forge-std/Script.sol";
-import {ProsperityAidrop} from "../src/ProsperityAirdrop.sol";
+import {EcoAccountsAirdrop} from "../src/EcoAccountsAirdrop.sol";
 import {MockToken} from "../src/mocks/MockToken.sol";
 
 contract DeployAirdrop is Script {
@@ -10,27 +10,27 @@ contract DeployAirdrop is Script {
     uint256 private _amount = 2500000 * 4 * 1e18;
 
     function deployAirdrop(
-        uint256 _amount,
-        bytes32 _merkleRoot,
+        uint256 amount,
+        bytes32 merkleRoot,
         uint256 _expirationTime
-    ) public returns (ProsperityAidrop, MockToken) {
+    ) public returns (EcoAccountsAirdrop, MockToken) {
         MockToken token = new MockToken();
-        ProsperityAidrop airdrop = new ProsperityAidrop();
+        EcoAccountsAirdrop airdrop = new EcoAccountsAirdrop();
         airdrop.setMerkleRoot(
             address(token),
-            _merkleRoot,
+            merkleRoot,
             true,
             _expirationTime
         );
-        token.mint(airdrop.owner(), _amount);
-        token.approve(address(airdrop), _amount);
+        token.mint(airdrop.owner(), amount);
+        token.approve(address(airdrop), amount);
         console.log("Merkle Airdrop deployed at %s", address(airdrop));
         return (airdrop, token);
     }
 
-    function deployAirdrop() public returns (ProsperityAidrop, MockToken) {
+    function deployAirdrop() public returns (EcoAccountsAirdrop, MockToken) {
         MockToken token = new MockToken();
-        ProsperityAidrop airdrop = new ProsperityAidrop();
+        EcoAccountsAirdrop airdrop = new EcoAccountsAirdrop();
         airdrop.setMerkleRoot(address(token), _merkleRoot, true, 0);
         token.mint(airdrop.owner(), _amount);
         token.approve(address(airdrop), _amount);
@@ -40,7 +40,7 @@ contract DeployAirdrop is Script {
 
     function run() public {
         vm.startBroadcast();
-        ProsperityAidrop airdrop = new ProsperityAidrop();
+        EcoAccountsAirdrop airdrop = new EcoAccountsAirdrop();
         console.log("Merkle Airdrop deployed at %s", address(airdrop));
         vm.stopBroadcast();
     }

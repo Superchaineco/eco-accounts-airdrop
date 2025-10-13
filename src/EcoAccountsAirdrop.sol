@@ -13,7 +13,7 @@ import "forge-std/console.sol";
 // @author Anotherdev
 // @author Modified from Thirdweb
 
-contract ProsperityAidrop is EIP712, Ownable {
+contract EcoAccountsAirdrop is EIP712, Ownable {
     /*///////////////////////////////////////////////////////////////
                             State, constants & structs
     //////////////////////////////////////////////////////////////*/
@@ -21,13 +21,11 @@ contract ProsperityAidrop is EIP712, Ownable {
     /// @dev token contract address => conditionId
     mapping(address => uint256) public tokenConditionId;
     /// @dev token contract address => merkle root
-    mapping(address => bytes32) public tokenMerkleRoot;
+    mapping(address => mapping(uint256 => bytes32)) public tokenMerkleRoot;
     /// @dev token contract address => expiration timestamp
-    mapping(address => uint256) public tokenExpirationTime;
+    mapping(address => mapping(uint256 => uint256)) public tokenExpirationTime;
     /// @dev conditionId => hash(claimer address, token address, token id [1155]) => has claimed
     mapping(uint256 => mapping(bytes32 => bool)) private claimed;
-    /// @dev Mapping from request UID => whether the request is processed.
-    mapping(bytes32 => bool) public processed;
 
     struct AirdropContentERC20 {
         address recipient;
@@ -46,78 +44,28 @@ contract ProsperityAidrop is EIP712, Ownable {
     error AirdropNoMerkleRoot();
     error AirdropValueMismatch();
     error AirdropExpired();
+    error InvalidConditionId();
 
     /*///////////////////////////////////////////////////////////////
                                 Events
     //////////////////////////////////////////////////////////////*/
 
-    event Airdrop(address token);
-    event AirdropClaimed(address token, address receiver);
-    event AirdropExpirationSet(address token, uint256 expirationTime);
+    event AirdropClaimed(
+        address indexed token,
+        uint256 indexed tokenConditionId,
+        address indexed receiver
+    );
+    event AirdropExpirationSet(
+        address indexed token,
+        uint256 indexed tokenConditionId,
+        uint256 expirationTime
+    );
 
     /*///////////////////////////////////////////////////////////////
                             Constructor
     //////////////////////////////////////////////////////////////*/
 
     constructor() Ownable(msg.sender) {}
-
-    /*///////////////////////////////////////////////////////////////
-                            Airdrop Push
-    //////////////////////////////////////////////////////////////*/
-
-    /**
-     *  @notice          Lets contract-owner send native token (eth) to a list of addresses.
-     *  @dev             Owner should send total airdrop amount as msg.value.
-     *                   Can only be called by contract owner.
-     *
-     *  @param _contents List containing recipients and amounts to airdrop
-     */
-    function airdropNativeToken(
-        AirdropContentERC20[] calldata _contents
-    ) external payable onlyOwner {
-        uint256 len = _contents.length;
-        uint256 nativeTokenAmount;
-
-        for (uint256 i = 0; i < len; i++) {
-            nativeTokenAmount += _contents[i].amount;
-            SafeTransferLib.safeTransferETH(
-                _contents[i].recipient,
-                _contents[i].amount
-            );
-        }
-
-        if (nativeTokenAmount != msg.value) {
-            revert AirdropValueMismatch();
-        }
-
-        emit Airdrop(NATIVE_TOKEN_ADDRESS);
-    }
-
-    /**
-     *  @notice          Lets contract owner send ERC20 tokens to a list of addresses.
-     *  @dev             The token-owner should approve total airdrop amount to this contract.
-     *                   Can only be called by contract owner.
-     *
-     *  @param _tokenAddress Address of the ERC20 token being airdropped
-     *  @param _contents     List containing recipients and amounts to airdrop
-     */
-    function airdropERC20(
-        address _tokenAddress,
-        AirdropContentERC20[] calldata _contents
-    ) external onlyOwner {
-        uint256 len = _contents.length;
-
-        for (uint256 i = 0; i < len; i++) {
-            SafeTransferLib.safeTransferFrom(
-                _tokenAddress,
-                msg.sender,
-                _contents[i].recipient,
-                _contents[i].amount
-            );
-        }
-
-        emit Airdrop(_tokenAddress);
-    }
 
     /*///////////////////////////////////////////////////////////////
                             Airdrop Claimable
@@ -137,21 +85,21 @@ contract ProsperityAidrop is EIP712, Ownable {
         address _token,
         address _receiver,
         uint256 _quantity,
+        uint256 _conditionId,
         bytes32[] calldata _proofs
-    ) external {
+    ) external conditionIdGuard(_token, _conditionId) {
         bytes32 claimHash = _getClaimHashERC20(_receiver, _token);
-        uint256 conditionId = tokenConditionId[_token];
 
-        if (claimed[conditionId][claimHash]) {
+        if (claimed[_conditionId][claimHash]) {
             revert AirdropAlreadyClaimed();
         }
 
-        bytes32 _tokenMerkleRoot = tokenMerkleRoot[_token];
+        bytes32 _tokenMerkleRoot = tokenMerkleRoot[_token][_conditionId];
         if (_tokenMerkleRoot == bytes32(0)) {
             revert AirdropNoMerkleRoot();
         }
 
-        uint256 expirationTime = tokenExpirationTime[_token];
+        uint256 expirationTime = tokenExpirationTime[_token][_conditionId];
         if (expirationTime > 0 && block.timestamp > expirationTime) {
             revert AirdropExpired();
         }
@@ -165,11 +113,11 @@ contract ProsperityAidrop is EIP712, Ownable {
             revert AirdropInvalidProof();
         }
 
-        claimed[conditionId][claimHash] = true;
+        claimed[_conditionId][claimHash] = true;
 
         SafeTransferLib.safeTransferFrom(_token, owner(), _receiver, _quantity);
 
-        emit AirdropClaimed(_token, _receiver);
+        emit AirdropClaimed(_token, _conditionId, _receiver);
     }
 
     /*///////////////////////////////////////////////////////////////
@@ -193,10 +141,13 @@ contract ProsperityAidrop is EIP712, Ownable {
         if (_resetClaimStatus || tokenConditionId[_token] == 0) {
             tokenConditionId[_token] += 1;
         }
-        tokenMerkleRoot[_token] = _tokenMerkleRoot;
-        tokenExpirationTime[_token] = _expirationTime;
 
-        emit AirdropExpirationSet(_token, _expirationTime);
+        uint256 _conditionId = tokenConditionId[_token];
+
+        tokenMerkleRoot[_token][_conditionId] = _tokenMerkleRoot;
+        tokenExpirationTime[_token][_conditionId] = _expirationTime;
+
+        emit AirdropExpirationSet(_token, _conditionId, _expirationTime);
     }
 
     /**
@@ -207,10 +158,11 @@ contract ProsperityAidrop is EIP712, Ownable {
      */
     function updateAirdropExpiration(
         address _token,
+        uint256 _conditionId,
         uint256 _expirationTime
-    ) external onlyOwner {
-        tokenExpirationTime[_token] = _expirationTime;
-        emit AirdropExpirationSet(_token, _expirationTime);
+    ) external onlyOwner conditionIdGuard(_token, _conditionId) {
+        tokenExpirationTime[_token][_conditionId] = _expirationTime;
+        emit AirdropExpirationSet(_token, _conditionId, _expirationTime);
     }
 
     /**
@@ -219,8 +171,11 @@ contract ProsperityAidrop is EIP712, Ownable {
      *  @param _token    Address of airdrop token
      *  @return expired  True if the airdrop has expired, false otherwise
      */
-    function isAirdropExpired(address _token) external view returns (bool) {
-        uint256 expirationTime = tokenExpirationTime[_token];
+    function isAirdropExpired(
+        address _token,
+        uint256 _conditionId
+    ) external view returns (bool) {
+        uint256 expirationTime = tokenExpirationTime[_token][_conditionId];
         return expirationTime > 0 && block.timestamp > expirationTime;
     }
 
@@ -228,18 +183,9 @@ contract ProsperityAidrop is EIP712, Ownable {
     function isClaimed(
         address _receiver,
         address _token,
-        uint256 _tokenId
+        uint256 _conditionId
     ) external view returns (bool) {
-        uint256 _conditionId = tokenConditionId[_token];
-
-        bytes32 claimHash = keccak256(
-            abi.encodePacked(_receiver, _token, _tokenId)
-        );
-        if (claimed[_conditionId][claimHash]) {
-            return true;
-        }
-
-        claimHash = keccak256(abi.encodePacked(_receiver, _token));
+        bytes32 claimHash = keccak256(abi.encodePacked(_receiver, _token));
         if (claimed[_conditionId][claimHash]) {
             return true;
         }
@@ -254,7 +200,7 @@ contract ProsperityAidrop is EIP712, Ownable {
         override
         returns (string memory name, string memory version)
     {
-        name = "ProsperityAidrop";
+        name = "EcoAccountsAirdrop";
         version = "1";
     }
 
@@ -262,7 +208,14 @@ contract ProsperityAidrop is EIP712, Ownable {
     function _getClaimHashERC20(
         address _receiver,
         address _token
-    ) private view returns (bytes32) {
+    ) private pure returns (bytes32) {
         return keccak256(abi.encodePacked(_receiver, _token));
+    }
+
+    modifier conditionIdGuard(address _token, uint256 _conditionId) {
+        if (tokenConditionId[_token] < _conditionId) {
+            revert InvalidConditionId();
+        }
+        _;
     }
 }
