@@ -6,10 +6,10 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract SetMerkleRoot is Script {
     bytes32 private _merkleRoot =
-        0xc6f434a596ef9576ff110b99f4a01cb8b4ae07d9c8e1ac0fe8b7a69e339ac98b;
+        0x5de676e6fe67bf2d3c01be91bcf27dac80f4fc9362cd69cc0cb0a73845d97465;
     // uint256 private _amount = 2500000 * 4 * 1e18;
     // Expiration time: 30 days from now (in seconds)
-    uint256 private _expirationTime = block.timestamp + 7 days;
+    uint256 private _expirationTime = block.timestamp + 31 days;
 
     function run() public returns (ProsperityAidrop) {
         vm.startBroadcast();

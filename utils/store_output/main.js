@@ -35,14 +35,27 @@ function buildProofArrayLiteral(proofHexArray) {
 }
 
 async function main() {
-  const [,, jsonPath, labelArg, tokenAddrArg] = process.argv;
+  const [,, jsonPath, labelArg, tokenAddrArg, expirationArg] = process.argv;
   if (!jsonPath || !labelArg) {
-    console.error('Uso: node load_airdrop.js /ruta/airdrop.json "label_del_airdrop" [tokenAddress_0x...]');
+    console.error('Uso: node load_airdrop.js /ruta/airdrop.json "label_del_airdrop" [tokenAddress_0x...] [expiration_date(YYYY-MM-DD)]');
     process.exit(1);
   }
 
   const raw = fs.readFileSync(jsonPath, 'utf8');
   const data = JSON.parse(raw);
+
+  // Validar y procesar expiration_date opcional
+  let expirationDate = null;
+  if (expirationArg) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(expirationArg)) {
+      throw new Error(`expiration_date inválido: ${expirationArg}. Debe tener el formato YYYY-MM-DD.`);
+    }
+    const parsedDate = new Date(expirationArg + 'T00:00:00Z');
+    if (isNaN(parsedDate.getTime())) {
+      throw new Error(`expiration_date inválido: ${expirationArg}. No es una fecha válida.`);
+    }
+    expirationDate = expirationArg; // PostgreSQL acepta el formato YYYY-MM-DD como DATE
+  }
 
   // Transformar el objeto { address: entry } en un arreglo
   const entries = Object.entries(data).map(([address, entry]) => {
@@ -64,7 +77,7 @@ async function main() {
     const amountStr = String(inputs[1]);
     if (!/^\d+$/.test(amountStr)) throw new Error(`amount inválido: ${amountStr}`);
 
-    return {
+  return {
       address,
       amount: amountStr,
       proof,
@@ -101,12 +114,13 @@ async function main() {
 
     // Crear airdrop
     const createAirdropSql = `
-      INSERT INTO airdrops (label, root, hash_fn, token_address, created_at)
+      INSERT INTO airdrops (label, root, hash_fn, token_address, expiration_date, created_at)
       VALUES (
         $1,
         $2,                         -- bytea (root)
         'keccak256',
         $3,                         -- bytea (token_address) o null
+        $4,                         -- date (expiration_date) o null
         now()
       )
       RETURNING id;
@@ -115,6 +129,7 @@ async function main() {
       label,
       hexToBuffer(rootHex),
       tokenAddressHex ? hexToBuffer(tokenAddressHex) : null,
+      expirationDate,
     ];
 
     const { rows } = await client.query(createAirdropSql, airdropParams);
@@ -157,7 +172,7 @@ async function main() {
 
     // Mostrar el último airdrop insertado (confirmación)
     const { rows: last } = await client.query(`
-      SELECT id, label, '0x' || encode(root,'hex') AS root_hex, created_at
+      SELECT id, label, '0x' || encode(root,'hex') AS root_hex, expiration_date, created_at
       FROM airdrops
       ORDER BY created_at DESC
       LIMIT 1;

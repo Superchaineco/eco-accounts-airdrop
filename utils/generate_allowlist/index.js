@@ -5,36 +5,36 @@ import csv from 'csv-parser';
 const TOKEN_AMOUNT = BigInt('1000000000000000000'); // 1 * 10^18
 
 /**
- * Genera el objeto con la información de cada fila.
+ * Genera el objeto con la información de cada fila a partir del CSV actualizado.
+ * - Toma el total ya calculado de la columna "S0 Reward".
+ * - Genera las razones usando "Prosperity Pass Level", "Self Verified" y "S0 Gov Contributor".
  * @param {Object} row - Fila parseada del CSV.
  */
 function createEntry(row) {
-  const address = row['Super Account'];
-  const level = parseInt(row.Level, 10) || 0;
-  const badges = JSON.parse(row.Badges || '[]');
+  const address = (row['PP Address'] || '').trim();
 
-  let totalTokens = BigInt(0);
+  // Parseo de columnas relevantes para reasons
+  const level = parseInt(row['Prosperity Pass Level'], 10) || 0;
+  const selfVerified =
+    String(row['Self Verified'] || '')
+      .trim()
+      .toLowerCase() === 'yes';
+  const govContributor = parseInt(row['S0 Gov Contributor'], 10) || 0;
+
+  // Total de recompensa pre-calculado (en unidades enteras de token, e.g. "2,750")
+  // Convertimos a wei multiplicando por 1e18
+  const rawReward = (row['S0 Reward'] || '0').toString().replace(/,/g, '').trim();
+  const rewardTokens = BigInt(rawReward || '0') * TOKEN_AMOUNT;
+
+  // Construcción de reasons
   const reasons = [];
-
-  // Tokens por nivel
-  if (level > 0) {
-    totalTokens += TOKEN_AMOUNT * BigInt(level);
-    reasons.push(`Reached level ${level}`);
-  }
-
-  // Tokens por Self Verification badge
-  const hasSelfVerification = badges.some(
-    (badge) => badge.badgeId === '0x11' && badge.name === 'Self Verification'
-  );
-
-  if (hasSelfVerification) {
-    totalTokens += TOKEN_AMOUNT;
-    reasons.push('Claimed Self verification badge');
-  }
+  if (level > 0) reasons.push(`Reached level ${level}`);
+  if (selfVerified) reasons.push('Self Verified');
+  if (govContributor > 0) reasons.push(`S0 Gov Contributor Tier ${govContributor}`);
 
   return {
     address,
-    tokenAmount: totalTokens.toString(),
+    tokenAmount: rewardTokens.toString(),
     reasons,
   };
 }
@@ -51,7 +51,7 @@ function createEntry(row) {
  * }
  */
 function generateAllowlist() {
-  const csvPath = './output.csv';
+  const csvPath = './allowlist.csv';
   const outputPath = './allowlist.json';
   const entries = [];
 
