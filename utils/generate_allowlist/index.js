@@ -6,31 +6,31 @@ const TOKEN_AMOUNT = BigInt('1000000000000000000'); // 1 * 10^18
 
 /**
  * Genera el objeto con la información de cada fila a partir del CSV actualizado.
- * - Toma el total ya calculado de la columna "S0 Reward".
- * - Genera las razones usando "Prosperity Pass Level", "Self Verified" y "S0 Gov Contributor".
+ * - Toma el total ya calculado de la columna "Rewards".
+ * - Genera las razones usando badge_17_tier (Self Verification),
+ *   badge_22_tier (S1 Transactions) y badge_26_tier (Celo Vault Deposit).
  * @param {Object} row - Fila parseada del CSV.
  */
 function createEntry(row) {
-  const address = (row['PP Address'] || '').trim();
+  const address = (row['account'] || '').trim();
 
   // Parseo de columnas relevantes para reasons
-  const level = parseInt(row['Prosperity Pass Level'], 10) || 0;
-  const selfVerified =
-    String(row['Self Verified'] || '')
-      .trim()
-      .toLowerCase() === 'yes';
-  const govContributor = parseInt(row['S0 Gov Contributor'], 10) || 0;
+  const badge17Tier = parseInt(row['badge_17_tier'], 10) || 0;
+  const badge22Tier = parseInt(row['badge_22_tier'], 10) || 0;
+  const badge26Tier = parseInt(row['badge_26_tier'], 10) || 0;
+  const ppLevel = parseInt(row['pp_level'], 10) || 0;
 
-  // Total de recompensa pre-calculado (en unidades enteras de token, e.g. "2,750")
+  // Total de recompensa pre-calculado (en unidades enteras de token)
   // Convertimos a wei multiplicando por 1e18
-  const rawReward = (row['S0 Reward'] || '0').toString().replace(/,/g, '').trim();
+  const rawReward = (row['Rewards'] || '0').toString().replace(/,/g, '').trim();
   const rewardTokens = BigInt(rawReward || '0') * TOKEN_AMOUNT;
 
   // Construcción de reasons
   const reasons = [];
-  if (level > 0) reasons.push(`Reached level ${level}`);
-  if (selfVerified) reasons.push('Self Verified');
-  if (govContributor > 0) reasons.push(`S0 Gov Contributor Tier ${govContributor}`);
+  if (badge17Tier > 0) reasons.push(`Self verification - Tier ${badge17Tier}`);
+  if (badge22Tier > 0) reasons.push(`S1 Transactions - Tier ${badge22Tier}`);
+  if (badge26Tier > 0) reasons.push(`Celo Vault Deposit - Tier ${badge26Tier}`);
+  if (ppLevel > 0) reasons.push(`Prosperity Passport - Level ${ppLevel}`);
 
   return {
     address,
@@ -54,14 +54,25 @@ function generateAllowlist() {
   const csvPath = './allowlist.csv';
   const outputPath = './allowlist.json';
   const entries = [];
+  let rowCount = 0;
 
   fs.createReadStream(path.resolve(csvPath))
     .pipe(csv())
     .on('data', (row) => {
+      if (rowCount === 0) {
+        console.log('First row keys:', Object.keys(row));
+      }
+      rowCount++;
       const entry = createEntry(row);
-      entries.push(entry);
+      if (entry.address) {
+        entries.push(entry);
+      }
     })
     .on('end', () => {
+      console.log(
+        `Total rows processed: ${rowCount}, Valid entries: ${entries.length}`
+      );
+
       const finalOutput = {
         types: ['address', 'uint'],
         count: entries.length,
