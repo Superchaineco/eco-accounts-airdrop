@@ -27,10 +27,12 @@ function createEntry(row) {
 
   // Construcción de reasons
   const reasons = [];
-  if (badge17Tier > 0) reasons.push(`Self verification - Tier ${badge17Tier}`);
-  if (badge22Tier > 0) reasons.push(`S1 Transactions - Tier ${badge22Tier}`);
-  if (badge26Tier > 0) reasons.push(`Celo Vault Deposit - Tier ${badge26Tier}`);
-  if (ppLevel > 0) reasons.push(`Prosperity Passport - Level ${ppLevel}`);
+  if (badge17Tier > 0) reasons.push(`Verified with Self`);
+  if (badge22Tier > 0)
+    reasons.push(`Earned S1 Transactions badge tier ${badge22Tier}`);
+  if (badge26Tier > 0)
+    reasons.push(`Earned Celo Vaults Deposits badge tier ${badge26Tier}`);
+  if (ppLevel > 0) reasons.push(`Reached Level ${ppLevel}`);
 
   return {
     address,
